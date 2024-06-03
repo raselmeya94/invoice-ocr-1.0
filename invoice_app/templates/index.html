@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Image and Extract Text</title>
+    <style>
+        .container {
+            display: flex;
+        }
+        .container .image, .container .text {
+            flex: 1;
+            margin: 10px;
+        }
+        .container .image img {
+            max-width: 100%;
+            height: auto;
+        }
+        .container .text pre {
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>Upload Image and Extract Text</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Upload</button>
+    </form>
+
+    {% if uploaded_image_data and extracted_text %}
+    <div class="container">
+        <div class="image">
+            <h2>Uploaded Image</h2>
+            <img src="data:image/jpeg;base64,{{ uploaded_image_data }}" alt="Uploaded Image">
+        </div>
+        <div class="text">
+            <h2>Extracted Text</h2>
+            <pre>{{ extracted_text }}</pre>
+        </div>
+    </div>
+    {% endif %}
+</body>
+</html>
