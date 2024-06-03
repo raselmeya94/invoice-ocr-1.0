@@ -2,42 +2,120 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Upload Image and Extract Text</title>
+    <title>Upload File and Extract Text</title>
     <style>
-        .container {
+        body {
+            margin: 0;
+            padding: 20px;
             display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        .container .image, .container .text {
+        form {
+            display: {% if uploaded_file_data and extracted_text %}none{% else %}block{% endif %}; /* Hide form if uploaded_file_data and extracted_text are present */
+            width: 50%; /* Adjust the width of the form as needed */
+            max-width: 600px; /* Set a maximum width for responsiveness */
+            padding: 20px;
+            border: 2px solid #ccc;
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+            text-align: center; /* Center align form contents */
+        }
+        form button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .container {
+            display: {% if uploaded_file_data and extracted_text %}flex{% else %}none{% endif %}; /* Show container if uploaded_file_data and extracted_text are present */
+            flex-direction: row; /* Ensure children are aligned in a row */
+            width: 100%; /* Ensure the container takes the full width */
+            height: 100vh; /* Ensure the container takes the full height */
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+            margin-top: 20px;
+        }
+        .container .file, .container .text {
             flex: 1;
             margin: 10px;
+            border: 2px solid #ccc; /* Add border for identification */
+            padding: 10px; /* Add padding for better presentation */
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+            overflow: hidden; /* Prevent content overflow */
+            display: flex;
+            flex-direction: column;
         }
-        .container .image img {
-            max-width: 100%;
-            height: auto;
+        .container .file h2, .container .text h2 {
+            text-align: center; /* Center align headings */
+            margin-top: 0; /* Remove default margin */
+        }
+        .container .file {
+            justify-content: flex-start; /* Align content to the start (top) of the container */
+        }
+        .container .file img {
+            max-width: 100%; /* Ensure the image doesn't exceed its container */
+            max-height: 100%; /* Ensure the image doesn't exceed its container */
+            width: auto; /* Maintain aspect ratio */
+            height: auto; /* Maintain aspect ratio */
+            display: block; /* Prevent any inline spacing issues */
+            margin: auto; /* Center align the image within its container */
+        }
+        .container .file iframe {
+            width: 100%;
+            height: 100%; /* Ensure the iframe takes the full height */
+            border: none;
         }
         .container .text pre {
             white-space: pre-wrap;
+            flex: 1; /* Fill remaining space in container */
+            overflow-y: auto; /* Add vertical scroll if content exceeds height */
+        }
+        .back-button {
+            margin-top: 20px;
+        }
+        .back-button a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .back-button a:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
 <body>
-    <h1>Upload Image and Extract Text</h1>
+    <h1>Invoice Information Extraction</h1>
+
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Upload</button>
     </form>
 
-    {% if uploaded_image_data and extracted_text %}
+    {% if uploaded_file_data and extracted_text %}
     <div class="container">
-        <div class="image">
-            <h2>Uploaded Image</h2>
-            <img src="data:image/jpeg;base64,{{ uploaded_image_data }}" alt="Uploaded Image">
+        <div class="file">
+            <h2>Uploaded File</h2>
+            {% if file_type == 'image' %}
+                <img src="data:image/jpeg;base64,{{ uploaded_file_data }}" alt="Uploaded Image">
+            {% elif file_type == 'pdf' %}
+                <iframe src="data:application/pdf;base64,{{ uploaded_file_data }}"></iframe>
+            {% endif %}
         </div>
         <div class="text">
             <h2>Extracted Text</h2>
             <pre>{{ extracted_text }}</pre>
         </div>
+    </div>
+    <div class="back-button">
+        <a href="/">Back to Home</a>
     </div>
     {% endif %}
 </body>

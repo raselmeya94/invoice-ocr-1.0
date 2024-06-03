@@ -4,5 +4,5 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.upload_image, name='index'),
+    path('', views.upload_file, name='index'),
 ]
