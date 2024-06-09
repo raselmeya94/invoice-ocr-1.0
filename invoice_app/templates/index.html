@@ -1,122 +1,269 @@
+<!--final code&#45;&#45;-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Upload File and Extract Text</title>
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <title>Upload Multiple Files</title>
+
     <style>
-        body {
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
+            .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
             align-items: center;
         }
-        form {
-            display: {% if uploaded_file_data and extracted_text %}none{% else %}block{% endif %}; /* Hide form if uploaded_file_data and extracted_text are present */
-            width: 50%; /* Adjust the width of the form as needed */
-            max-width: 600px; /* Set a maximum width for responsiveness */
+        .modal-content {
+            background-color: #fff;
             padding: 20px;
-            border: 2px solid #ccc;
-            box-sizing: border-box; /* Include padding and border in the element's total width and height */
-            text-align: center; /* Center align form contents */
-        }
-        form button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        .container {
-            display: {% if uploaded_file_data and extracted_text %}flex{% else %}none{% endif %}; /* Show container if uploaded_file_data and extracted_text are present */
-            flex-direction: row; /* Ensure children are aligned in a row */
-            width: 100%; /* Ensure the container takes the full width */
-            height: 100vh; /* Ensure the container takes the full height */
-            box-sizing: border-box; /* Include padding and border in the element's total width and height */
-            margin-top: 20px;
-        }
-        .container .file, .container .text {
-            flex: 1;
-            margin: 10px;
-            border: 2px solid #ccc; /* Add border for identification */
-            padding: 10px; /* Add padding for better presentation */
-            box-sizing: border-box; /* Include padding and border in the element's total width and height */
-            overflow: hidden; /* Prevent content overflow */
+            border-radius: 5px;
+            max-width: 80%;
+            max-height: 80%;
+            width: 90%;
             display: flex;
             flex-direction: column;
+            overflow-y: auto;
         }
-        .container .file h2, .container .text h2 {
-            text-align: center; /* Center align headings */
-            margin-top: 0; /* Remove default margin */
+        .preview-container {
+            display: flex;
+            justify-content: space-between;
         }
-        .container .file {
-            justify-content: flex-start; /* Align content to the start (top) of the container */
+        .preview-container div {
+            flex: 1;
+            padding: 10px;
+            overflow: auto;
         }
-        .container .file img {
-            max-width: 100%; /* Ensure the image doesn't exceed its container */
-            max-height: 100%; /* Ensure the image doesn't exceed its container */
-            width: auto; /* Maintain aspect ratio */
-            height: auto; /* Maintain aspect ratio */
-            display: block; /* Prevent any inline spacing issues */
-            margin: auto; /* Center align the image within its container */
+        .preview-container div img {
+            max-width: 100%;
+            height: 80%;
         }
-        .container .file iframe {
-            width: 100%;
-            height: 100%; /* Ensure the iframe takes the full height */
+        .close-button {
+            align-self: flex-end;
+            margin-bottom: 10px;
+            background: none;
             border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
         }
-        .container .text pre {
-            white-space: pre-wrap;
-            flex: 1; /* Fill remaining space in container */
-            overflow-y: auto; /* Add vertical scroll if content exceeds height */
+        .more-info-modal {
+            display: none;
+            position: fixed;
+            z-index: 2; /* Adjusted z-index to be higher than the preview modal */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
         }
-        .back-button {
+        .more-info-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 80%;
+            max-height: 80%;
+            width: 90%;
+            overflow-y: auto;
+        }
+        .close-more-info {
+            align-self: flex-end;
+            margin-bottom: 10px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        #upload-form {
+            text-align: center;
+        }
+
+        #file-table {
+            border-collapse: collapse;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            width : 50%;
+        }
+
+        #file-table th {
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            padding : 10px;
+        }
+
+        #file-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .df {
+            display: flex;
+            justify-content: center;
+            padding-top: 10px;
+        }
+
+        .button-container {
             margin-top: 20px;
         }
-        .back-button a {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            text-decoration: none;
+
+        .upload-button {
+            padding: 5px 30px;
+            font-size: 14px;
+            background-color: #808080;
+            border: none;
+            cursor: pointer;
             border-radius: 5px;
-            transition: background-color 0.3s ease;
+            color: #fff;
         }
-        .back-button a:hover {
-            background-color: #45a049;
+
+        .upload-button:hover {
+            background-color: #27ae60;
         }
-    </style>
+        .df button {
+          width: 100px;
+          padding: 5px 20px;
+          border-radius: 5px;
+          font-size: 18px;
+
+}
+         .df button:active {
+          background-color: #3498db
+        }
+
+        .df button:hover {
+          background-color: #2980b9 ;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #f1f1f1;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+        }
+
+</style>
 </head>
 <body>
     <h1>Invoice Information Extraction</h1>
-
-    <form method="post" enctype="multipart/form-data">
+    <form id="upload-form" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Upload</button>
+        <button type="submit" class="upload-button">Upload</button>
     </form>
 
-    {% if uploaded_file_data and extracted_text %}
-    <div class="container">
-        <div class="file">
-            <h2>Uploaded File</h2>
-            {% if file_type == 'image' %}
-                <img src="data:image/jpeg;base64,{{ uploaded_file_data }}" alt="Uploaded Image">
-            {% elif file_type == 'pdf' %}
-                <iframe src="data:application/pdf;base64,{{ uploaded_file_data }}"></iframe>
-            {% endif %}
-        </div>
-        <div class="text">
-            <h2>Extracted Text</h2>
-            <pre>{{ extracted_text }}</pre>
+    <div class="df">
+        <table id="file-table">
+            <thead>
+                <tr>
+                    <th>Filename</th>
+                    <th>Filesize (KB)</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data %}
+                    <tr>
+                        <td>{{ item.filename }}</td>
+                        <td>{{ item.file_size }}</td>
+                        <td>
+                            <button type="button" onclick="previewFile({{ forloop.counter0 }})">Preview</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div id="preview-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-button" onclick="closePreview()">&times;</button>
+            <div class="preview-container" id="preview-section">
+                <table>
+                   <tr>
+                      <td>
+                         <h2 style="text-align:center">Uploaded File</h2>
+                      </td>
+                      <td>
+                         <h2 style="text-align:center">Extracted Text</h2>
+                      </td>
+                   </tr>
+                   <tr>
+                      <td>
+                         <div id="left-preview">
+                         </div>
+                      </td>
+                      <td>
+                         <div id="right-preview">
+                         </div>
+                      </td>
+                   </tr>
+                </table>
+            </div>
+            <button onclick="showMoreInfo()">Show More Info</button>
         </div>
     </div>
-    <div class="back-button">
-        <a href="/">Back to Home</a>
+
+    <div id="more-info-modal" class="more-info-modal">
+        <div class="more-info-content">
+            <button class="close-more-info" onclick="closeMoreInfo()">&times;</button>
+            <div id="more-info-section"></div>
+        </div>
     </div>
-    {% endif %}
+
+
+
+
+    <script>
+        const data = {{ data|safe }};
+        function previewFile(index) {
+            const item = data[index];
+            const leftPreview = document.getElementById('left-preview');
+            const rightPreview = document.getElementById('right-preview');
+
+            leftPreview.innerHTML = `
+                <img src="data:image/jpg;base64,${item.uploaded_file_data}" alt="Uploaded Image">
+            `;
+            rightPreview.innerHTML = `
+                <pre>${item.extracted_text}</pre>
+            `;
+
+            document.getElementById('preview-modal').style.display = 'flex';
+        }
+
+        function closePreview() {
+            document.getElementById('preview-modal').style.display = 'none';
+        }
+
+        function showMoreInfo() {
+            const moreInfoSection = document.getElementById('more-info-section');
+            const index = Array.from(document.querySelectorAll('#file-table button')).findIndex(button => button.innerText === 'Preview');
+            const item = data[index];
+            moreInfoSection.innerHTML = item.df_html;
+            document.getElementById('more-info-modal').style.display = 'flex';
+        }
+
+        function closeMoreInfo() {
+            document.getElementById('more-info-modal').style.display = 'none';
+        }
+    </script>
+  <footer>
+        &copy; 2024 Tappware Solution Limited. All rights reserved.
+    </footer>
 </body>
 </html>
