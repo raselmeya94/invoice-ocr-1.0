@@ -1,13 +1,11 @@
-<!--final code&#45;&#45;-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="csrf-token" content="{{ csrf_token }}">
     <title>Upload Multiple Files</title>
-
     <style>
-            .modal {
+        .modal {
             display: none;
             position: fixed;
             top: 0;
@@ -22,25 +20,44 @@
             background-color: #fff;
             padding: 20px;
             border-radius: 5px;
-            max-width: 80%;
-            max-height: 80%;
+            max-width: 90%;
+            max-height: 90%;
             width: 90%;
             display: flex;
             flex-direction: column;
             overflow-y: auto;
         }
-        .preview-container {
-            display: flex;
+        #preview-modal .modal-content {
+            align-items: center;
             justify-content: space-between;
         }
-        .preview-container div {
-            flex: 1;
-            padding: 10px;
-            overflow: auto;
+        .preview-container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            gap: 10px;
+
+   /* Add space between left and right previews */
         }
-        .preview-container div img {
-            max-width: 100%;
-            height: 80%;
+        .left-preview, .right-preview {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .left-preview iframe, .left-preview img {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .left-preview-pdf{
+            height: 100%;
+        }
+        .right-preview pre {
+            white-space: pre-wrap;
+            overflow-y: auto;
+            height: 100%;
+            padding-left: 20px;
         }
         .close-button {
             align-self: flex-end;
@@ -50,10 +67,35 @@
             font-size: 1.5rem;
             cursor: pointer;
         }
+        .close-more-info {
+            align-self: flex-end;
+            margin-bottom: 10px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .showMoreInfo {
+            padding: 10px 20px;
+           /* Add padding to the button */
+            font-size: 14px;
+            background-color: #808080;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            color: #fff;
+            margin-top: 10px ;
+            margin-bottom: 10px;
+            align-self: center;
+           /* Center the button horizontally */
+        }
+        .showMoreInfo:hover {
+            background-color: #27ae60;
+        }
         .more-info-modal {
             display: none;
             position: fixed;
-            z-index: 2; /* Adjusted z-index to be higher than the preview modal */
+            z-index: 2;
             left: 0;
             top: 0;
             width: 100%;
@@ -64,6 +106,9 @@
             align-items: center;
         }
         .more-info-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
             background-color: #fff;
             padding: 20px;
             border-radius: 5px;
@@ -72,50 +117,57 @@
             width: 90%;
             overflow-y: auto;
         }
+        #more-info-section {
+         text-align: center ;
+        }
         .close-more-info {
             align-self: flex-end;
-            margin-bottom: 10px;
+            margin-bottom: 1px;
             background: none;
             border: none;
             font-size: 1.5rem;
             cursor: pointer;
         }
+        .invoice-info {
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 0px;
+        }
         body {
             font-family: Arial, sans-serif;
+            margin: 0px;
         }
-
         h1 {
             text-align: center;
         }
-
         #upload-form {
             text-align: center;
         }
-
         #file-table {
             border-collapse: collapse;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-            width : 50%;
+            width: 50%;
         }
-
         #file-table th {
-            background-color: #f0f0f0;
-            border: 1px solid #ddd;
-            padding : 10px;
+            background-color: #0c63cd;
+            border: none;
+            padding: 10px;
+            color: #ffffff;
+            border-top-right-radius: 10px;
+            border-top-left-radius: 10px
         }
-
         #file-table td {
             border: 1px solid #ddd;
             padding: 10px;
             text-align: center;
         }
-
         .df {
             display: flex;
             justify-content: center;
             padding-top: 10px;
+            margin-bottom: 50px;
         }
-
         .button-container {
             margin-top: 20px;
         }
@@ -129,123 +181,189 @@
             border-radius: 5px;
             color: #fff;
         }
-
         .upload-button:hover {
             background-color: #27ae60;
         }
         .df button {
-          width: 100px;
-          padding: 5px 20px;
-          border-radius: 5px;
-          font-size: 18px;
-
-}
-         .df button:active {
-          background-color: #3498db
+            width: 100px;
+            padding: 5px 20px;
+            border-radius: 5px;
+            font-size: 18px;
         }
-
+        .df button:active {
+            background-color: #3498db;
+        }
         .df button:hover {
-          background-color: #2980b9 ;
+            background-color: #27ae60;
         }
         footer {
             text-align: center;
-            padding: 20px;
+            padding: 15px;
             background-color: #f1f1f1;
             position: fixed;
             width: 100%;
             bottom: 0;
             left: 0;
+
+        }
+        header {
+            background-color: #f1f1f1;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom-right-radius: 20px;
+            border-bottom-left-radius: 20px
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        .link-logo {
+            display: flex;
+            text-decoration: none;
+            align-items: center;
+        }
+        .logo img {
+            width: 50px;
+            height: auto;
+        }
+        .company-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-left: 10px;
+            color: #0c63cd;
+        }
+        nav {
+            display: flex;
+        }
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        nav li {
+            margin-right: 20px;
+        }
+        nav li a {
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #000000;
+            font-weight: bold;
+        }
+        nav li a:hover {
+            background-color: #ffff;
+            color:  #0c63cd;
         }
 
-</style>
+
+    </style>
 </head>
 <body>
-    <h1>Invoice Information Extraction</h1>
-    <form id="upload-form" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="upload-button">Upload</button>
-    </form>
-
-    <div class="df">
-        <table id="file-table">
-            <thead>
-                <tr>
-                    <th>Filename</th>
-                    <th>Filesize (KB)</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in data %}
-                    <tr>
-                        <td>{{ item.filename }}</td>
-                        <td>{{ item.file_size }}</td>
-                        <td>
-                            <button type="button" onclick="previewFile({{ forloop.counter0 }})">Preview</button>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+{% load static %}
+<header>
+    <div class="logo-container">
+        <a href="/" class="link-logo">
+            <div class="logo">
+                <img src="{% static 'invoice_app/images/download.jpeg' %}" alt="Download Image">
+            </div>
+            <div class="company-name">Invoice Extractor</div>
+        </a>
     </div>
+    <nav>
+        <ul >
+            <li><a href="/">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+</header>
+<h1>Invoice Information Extraction</h1>
 
-    <div id="preview-modal" class="modal">
+<form id="upload-form" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="upload-button">Upload</button>
+</form>
+{% if data %}
+<div class="df">
+    <table id="file-table">
+        <thead>
+            <tr>
+                <th>Filename</th>
+                <th>Filesize (KB)</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+                <tr>
+                    <td>{{ item.filename }}</td>
+                    <td>{{ item.file_size }}</td>
+                    <td>
+                        <button type="button" onclick="previewFile({{ forloop.counter0 }})">Preview</button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="modal" id="preview-modal">
         <div class="modal-content">
             <button class="close-button" onclick="closePreview()">&times;</button>
             <div class="preview-container" id="preview-section">
-                <table>
-                   <tr>
-                      <td>
-                         <h2 style="text-align:center">Uploaded File</h2>
-                      </td>
-                      <td>
-                         <h2 style="text-align:center">Extracted Text</h2>
-                      </td>
-                   </tr>
-                   <tr>
-                      <td>
-                         <div id="left-preview">
-                         </div>
-                      </td>
-                      <td>
-                         <div id="right-preview">
-                         </div>
-                      </td>
-                   </tr>
-                </table>
+                <div class="left-preview">
+                    <h2 style="text-align: center;">Uploaded File</h2>
+                    <div id="left-preview" class="left-preview-pdf"></div>
+                </div>
+
+                <div class="right-preview">
+                    <h2 style="text-align: center;">Extracted Text</h2>
+                    <div id="right-preview" ></div>
+                    <pre></pre>
+                </div>
             </div>
-            <button onclick="showMoreInfo()">Show More Info</button>
+            <button type="button" class="showMoreInfo" onclick="showMoreInfo()">Show More Info</button>
         </div>
     </div>
+    {% endif %}
 
     <div id="more-info-modal" class="more-info-modal">
         <div class="more-info-content">
             <button class="close-more-info" onclick="closeMoreInfo()">&times;</button>
+            <h2 class="invoice-info"><b>Invoice Information</b></h2>
             <div id="more-info-section"></div>
         </div>
     </div>
 
 
 
-
     <script>
         const data = {{ data|safe }};
         function previewFile(index) {
-            const item = data[index];
-            const leftPreview = document.getElementById('left-preview');
-            const rightPreview = document.getElementById('right-preview');
+        const item = data[index];
+        const leftPreview = document.getElementById('left-preview');
+        const rightPreview = document.getElementById('right-preview');
 
+        if (item.file_type === 'image') {
             leftPreview.innerHTML = `
                 <img src="data:image/jpg;base64,${item.uploaded_file_data}" alt="Uploaded Image">
             `;
-            rightPreview.innerHTML = `
-                <pre>${item.extracted_text}</pre>
+        } else if (item.file_type === 'pdf') {
+            leftPreview.innerHTML = `
+                <iframe src="data:application/pdf;base64,${item.uploaded_file_data}" frameborder ="0"></iframe>
             `;
-
-            document.getElementById('preview-modal').style.display = 'flex';
+        } else {
+            // Handle other file types or display an error message
         }
 
+        rightPreview.innerHTML = `
+            <pre>${item.extracted_text}</pre>
+        `;
+
+        document.getElementById('preview-modal').style.display = 'flex';
+    }
         function closePreview() {
             document.getElementById('preview-modal').style.display = 'none';
         }
