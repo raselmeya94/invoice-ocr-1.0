@@ -97,27 +97,49 @@ def extract_text_from_pdf(pdf_data):
 #     # Create DataFrame from extracted values
 #     invoice_df = pd.DataFrame([extracted_values])
 #     return invoice_df
+
 def text_to_info_finder(text):
     # Normalize the text by removing extra spaces and replacing known issues
     text = ' '.join(text.split())
-    text = text.replace('ate', 'Date')
-    
+    # text = text.replace('ate', 'Date')
+    print(text)
     # Remove special characters
     special_chars = ['¢', '(', ')']
     for char in special_chars:
         text = text.replace(char, '')
 
     # Define regex patterns for extracting specific columns
+    # patterns = {
+    # 'VAT Reg No': r"(?: V\.A\.T\. Reg\. No\.|Registration\:|VAT Reg No|VAT No\.:)\s*(GB \d{3} \d{3} \d{3}|GB \d{3} \d{4} \d{2}|(GB\d{9}))", 
+    # 'Company Reg No': r"Company Reg No\. (\w+)",
+    # 'Invoice No': r"(?:InvoiceNo|invoiceNo|Invoice No|Invoice Number|Invoice \#)\s*([A-Za-z0-9]+)|INV\d{6}|d{9}|\bINV\d{6}\b",
+    # # 'Date': r"(?:Date|Date:|ate|Order DDate\:) (\d{2}/\d{2}/\d{4})|\d{2}/\d{2}/\d{4} |\b\d{1,2} \w+ \d{4}\b",
+    # 'Order Date': r"Order (\w+)",
+    # 'Payment Due':r"Payment Due\:\s*\n?\s*(\d{2}/\d{2}/\d{4})",
+    # 'Goods Total': r"GOODS TOTAL (\d+\.\d+)",
+    # 'VAT Total': r"VAT TOTAL (\d+\.\d+)",
+    # 'Invoice Total': r"INVOICE TOTAL (\d+\.\d+)",
+    # 'Order No.': r"Order\s#\s*(\d+)",
+    # 'Order Date': r"Order\sDate:\s*(\b\d{1,2} \w+ \d{4}\b)",
+    # 'Subtotal': r"Subtotal\s*£(\d+\.\d{2})",
+    # 'VAT': r'VAT\s*£(\d+\.\d{2})',
+    # 'G Total': r'(?:INVOICE\sTOTAL|Grand\sTotal)\s*£(\d+\.\d{2} | (\d+\.\d+))',
+
+    # }
+
     patterns = {
-    'VAT Reg No': r"(?: V\.A\.T\. Reg\. No\.|Registration\:|VAT Reg No|VAT No\.:)\s*(GB \d{3} \d{3} \d{3}|GB \d{3} \d{4} \d{2}|(GB\d{9}))", 
-    'Company Reg No': r"Company Reg No\. (\w+)",
-    'Invoice No': r"(?:InvoiceNo|invoiceNo|Invoice No|Invoice Number|Invoice \#)\s*([A-Za-z0-9]+)|INV\d{6}|d{9}|\bINV\d{6}\b",
-    'Date': r"(?:Date|Date:|ate) (\d{2}/\d{2}/\d{4})|\d{2}/\d{2}/\d{4}",
-    'Payment Due':r"Payment Due:\s*\n?\s*(\d{2}/\d{2}/\d{4})",
-    'Goods Total': r"GOODS TOTAL (\d+\.\d+)",
-    'VAT Total': r"VAT TOTAL (\d+\.\d+)",
-    'Invoice Total': r"INVOICE TOTAL (\d+\.\d+)"}
-    
+        'Date': r"Order\sDate:\s*(\b\d{1,2} \w+ \d{4}\b)",
+        # 'Supplier': 
+        'Purchase Order Number':r"Order\s#\s*(\d+)",
+        'Document Reference': r"(?:InvoiceNo|invoiceNo|Invoice No|Invoice Number|Invoice \#)\s*([A-Za-z0-9]+)|INV\d{6}|d{9}|\bINV\d{6}\b",
+        'Due Date': r"Payment Due\:\s*\n?\s*(\d{2}/\d{2}/\d{4})",
+        # 'Customer':
+        # 'Currency':'GBP',
+        'Total Amount': r'Grand\sTotal\s*£(\d+\.\d{2})',
+        'Tax Amount': r'VAT\s*£(\d+\.\d{2})',
+        'Net Amount': r"Subtotal\s*£(\d+\.\d{2})"
+
+    }
 
 
     # Initialize an empty dictionary to store extracted values
@@ -133,6 +155,7 @@ def text_to_info_finder(text):
 
     # Create DataFrame from extracted values
     invoice_df = pd.DataFrame([extracted_values])
+    print(invoice_df)
     return invoice_df
 def information_retrieve(text):
     # columns = ['Item ID', 'Document Owner', 'Type', 'Date', 'Supplier', 'Purchase Order Number', 'Document Reference',
