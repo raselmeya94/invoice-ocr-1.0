@@ -176,16 +176,15 @@ h1 {
     border-top-right-radius: 10px;
     border-top-left-radius: 10px
 }
+#file-table button {
+    border:none;
+}
+#file-table button:hover{
+    background-color: #27ae60;
+    color: #ffffff;
+}
 /* Footer styles */
-/* footer {
-    text-align: center;
-    padding: 20px;
-    background-color: #f1f1f1;
-    position: fixed;
-    width: 100%;
-    bottom: 0;
-    left: 0;
-} */
+
 /* zafi*/
 .df {
     display: flex;
