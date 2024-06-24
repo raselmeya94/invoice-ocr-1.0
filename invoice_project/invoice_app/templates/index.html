@@ -6,221 +6,13 @@
     <meta name="csrf-token" content="{{ csrf_token }}">
     <link rel="stylesheet" href="static/style.css">
     <title>invoice info</title>
-    <!-- <style>
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            max-width: 90%;
-            max-height: 90%;
-            width: 90%;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-        }
-        .preview-container {
-            display: flex;
-            justify-content: space-between;
-            flex-direction: row;
-            width: 100%;
-            height: 100%;
-        }
-        .preview-container > div {
-            flex: 1;
-            padding: 10px;
-            overflow: auto;
-            display: flex;
-            flex-direction: column;
-        }
-        .preview-container img, .preview-container iframe {
-            width: 100%;
-            height: 100%;
-            flex-grow: 1;
-        }
-        .close-button {
-            align-self: flex-end;
-            margin-bottom: 10px;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        .more-info-modal {
-            display: none;
-            position: fixed;
-            z-index: 2;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.5);
-            justify-content: center;
-            align-items: center;
-        }
-        .more-info-content {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            max-width: 80%;
-            max-height: 80%;
-            width: 90%;
-            overflow-y: auto;
-        }
-        .close-more-info {
-            align-self: flex-end;
-            margin-bottom: 10px;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0px;
-        }
-        h1 {
-            text-align: center;
-        }
-        #upload-form {
-            text-align: center;
-        }
-        #file-table {
-            border-collapse: collapse;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-            width: 50%;
-        }
-        #file-table th {
-            background-color: #0c63cd;
-            border: none;
-            padding: 10px;
-            color: #ffffff;
-            border-top-right-radius: 10px;
-            border-top-left-radius: 10px
-        }
-        #file-table td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: center;
-        }
-        .df {
-            display: flex;
-            justify-content: center;
-            padding-top: 10px;
-            margin-bottom: 50px;
-        }
-        .button-container {
-            margin-top: 20px;
-        }
-
-        .upload-button {
-            padding: 5px 30px;
-            font-size: 14px;
-            background-color: #808080;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            color: #fff;
-        }
-        .upload-button:hover {
-            background-color: #27ae60;
-        }
-        .df button {
-            width: 100px;
-            padding: 5px 20px;
-            border-radius: 5px;
-            font-size: 18px;
-        }
-        .df button:active {
-            background-color: #3498db;
-        }
-        .df button:hover {
-            background-color: #27ae60;
-        }
-        footer {
-            text-align: center;
-            padding: 15px;
-            background-color: #f1f1f1;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-            left: 0;
-
-        }
-        header {
-            background-color: #f1f1f1;
-            padding: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom-right-radius: 20px;
-            border-bottom-left-radius: 20px
-        }
-        .logo-container {
-            display: flex;
-            align-items: center;
-        }
-        .link-logo {
-            display: flex;
-            text-decoration: none;
-            align-items: center;
-        }
-        .logo img {
-            width: 50px;
-            height: auto;
-        }
-        .company-name {
-            font-size: 24px;
-            font-weight: bold;
-            margin-left: 10px;
-            color: #0c63cd;
-        }
-        nav {
-            display: flex;
-        }
-        nav ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-        }
-        nav li {
-            margin-right: 20px;
-        }
-        nav li a {
-            padding: 10px 20px;
-            text-decoration: none;
-            color: #000000;
-            font-weight: bold;
-        }
-        nav li a:hover {
-            background-color: #ffff;
-            color:  #0c63cd;
-        }
-
-
-    </style> -->
 </head>
 <body>
 <header>
     <div class="logo-container">
         <a href="/" class="link-logo">
             <div class="logo">
-                <img src="{% static 'image/logo.jpeg' %}" alt="Download Image">
+                <img src="{% static 'image/invoice-logo.jpeg' %}" alt="Download Image">
             </div>
             <div class="company-name">Invoice Extractor</div>
         </a>
@@ -255,7 +47,7 @@
                         <td>{{ item.filename }}</td>
                         <td>{{ item.file_size }}</td>
                         <td>
-                            <button type="button" onclick="previewFile({{ forloop.counter0 }})">Preview</button>
+                            <button type="button" onclick="previewFile('{{ item.filename|slice:':-4' }}')">Preview</button>
                         </td>
                     </tr>
                 {% endfor %}
@@ -291,9 +83,17 @@
         </div>
     </div>
     <script>
-        const data = {{ data|safe }};
-        function previewFile(index) {
-            const item = data[index];
+        const new_data = {{ data|safe }};
+        let data = {};
+        new_data.forEach(entry => {
+            let filename = entry.filename;
+            let key = filename.split('.')[0]; 
+            data[key] = entry;
+        });
+        var pre_filename='';
+        function previewFile(filename) {
+            pre_filename=filename;
+            const item = data[filename];
             const leftPreview = document.getElementById('left-preview');
             const rightPreview = document.getElementById('right-preview');
 
@@ -321,8 +121,10 @@
         function showMoreInfo() {
             
             const moreInfoSection = document.getElementById('more-info-section');
-            const item = data[0];
+
+            const item = data[pre_filename];
             moreInfoSection.innerHTML = item.df_html; 
+            
 
             // Apply custom styles to the dynamically loaded table
             const table = moreInfoSection.querySelector('table'); 
