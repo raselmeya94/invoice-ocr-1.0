@@ -41,7 +41,7 @@ h1 {
     width: 100%;
     height: 100%;
     gap: 10px;
-    
+
    /* Add space between left and right previews */
 }
 .left-preview, .right-preview {
@@ -142,20 +142,23 @@ h1 {
 /* Form and button styles */
 #upload-form {
     text-align: center;
-    margin-bottom: 20px;
+    width: 100%;
+    padding:20px;
+
 }
 .upload-button {
+margin-top: 10px;
     padding: 10px 30px;
     font-size: 14px;
-    background-color: #808080;
+    background-color:  #40b49c;
     border: none;
     cursor: pointer;
     border-radius: 5px;
     color: #fff;
-}
+}/*
 .upload-button:hover {
-    background-color: #27ae60;
-}
+    background-color: #40b49c;
+}*/
 /* Table styles */
 #file-table {
     border-collapse: collapse;
@@ -167,9 +170,10 @@ h1 {
     border: 1px solid #ddd;
     padding: 10px;
     text-align: center;
+    font-size: 16px;
 }
 #file-table th {
-    background-color: #808080;
+    background-color: #40b49c;
     border: none;
     padding: 10px;
     color: #ffffff;
@@ -179,8 +183,13 @@ h1 {
 #file-table button {
     border:none;
 }
+.preview-button{
+    font-size: 16px;
+    padding :8px;
+    border-radius: 5px;
+}
 #file-table button:hover{
-    background-color: #27ae60;
+    background-color: #40b49c;
     color: #ffffff;
 }
 /* Footer styles */
@@ -228,7 +237,7 @@ header {
     font-size: 24px;
     font-weight: bold;
     margin-left: 10px;
-    color: #0c63cd;
+    color: #40b49c;
 }
 nav {
     display: flex;
@@ -238,6 +247,7 @@ nav ul {
     margin: 0;
     padding: 0;
     display: flex;
+    font-size: 18px;
 }
 nav li {
     margin-right: 20px;
@@ -245,10 +255,130 @@ nav li {
 nav li a {
     padding: 10px 20px;
     text-decoration: none;
-    color: #000000;
+    color: #40b49c;
     font-weight: bold;
+    border-radius: 5px;
 }
 nav li a:hover {
-    background-color: #ffff;
-    color:  #0c63cd;
+    background-color: #40b49c;
+    color: #ffffff;
 }
+
+
+
+/* 26june*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+.container {
+  height: 400px;
+  width: 100%;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  background-color: #fcfcfc;
+}
+
+.card {
+  border-radius: 10px;
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.3);
+  width: 800px;
+  height: 400px;
+  background-color: #ffffff;
+  padding: 10px 30px 40px;
+}
+
+.card h3 {
+  font-size: 22px;
+  font-weight: 600;
+
+}
+
+.drop_box {
+  margin: 10px 0;
+  padding: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border: 3px dotted #a3a3a3;
+  border-radius: 5px;
+}
+
+.drop_box h4 {
+  font-size: 16px;
+  font-weight: 400;
+  color: #2e2e2e;
+}
+
+.drop_box p {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  font-size: 12px;
+  color: #a3a3a3;
+}
+
+.btn {
+  text-decoration: none;
+  background-color: #005af0;
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  outline: none;
+  transition: 0.3s;
+}
+
+.btn:hover{
+  text-decoration: none;
+  background-color: #ffffff;
+  color: #005af0;
+  padding: 10px 20px;
+  border: none;
+  outline: 1px solid #010101;
+}
+.form input {
+  margin: 10px 0;
+  width: 100%;
+  background-color: #e2e2e2;
+  border: none;
+  outline: none;
+  padding: 12px 20px;
+  border-radius: 4px;
+}
+
+
+#id_files {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+#id_files {
+  border: 2px solid white;
+  color: gray;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: bold;
+  background-color: #40b49c;
+  color: #ffffff;
+}
+
+#id_files input[type=file] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+ p label{
+        display: none;
+  }
+ .img{
+     width: 100px;
+     height:100px;
+ }

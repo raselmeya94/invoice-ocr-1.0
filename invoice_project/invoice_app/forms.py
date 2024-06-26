@@ -1,27 +1,3 @@
-# # forms.py
-# from django import forms
-# class UploadFileForm(forms.Form):
-#     file = forms.FileField(required=True)
-####
-
-
-
-# from django import forms
-# from django.forms.widgets import ClearableFileInput
-#
-#
-# class MultipleFileInput(ClearableFileInput):
-#     allow_multiple_selected = True
-#
-#
-# class UploadFileForm(forms.Form):
-#     files = forms.FileField(widget=MultipleFileInput(attrs={'multiple': True}))
-
-###########
-
-
-
-
 from django import forms
 
 class MultipleFileInput(forms.ClearableFileInput):
@@ -39,24 +15,8 @@ class MultipleFileField(forms.FileField):
         else:
             result = single_file_clean(data, initial)
         return result
-
+#
 class UploadFileForm(forms.Form):
     files = MultipleFileField()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

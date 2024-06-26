@@ -30,7 +30,7 @@ def upload_file(request):
             elif file_type == 'application/pdf':
                 file_type = 'pdf'
             else:
-                print("something")
+                print("Sorry File Type Don't Match")
                 # return render(request, 'index.html', {
                 #     'form': form,
                 #     'error': 'Unsupported file type for: {}'.format(uploaded_file.name)
@@ -59,7 +59,7 @@ def upload_file(request):
             #         'df_html': None
             #     }
             # })
-        print((len(data)))
+
 
 
         return render(request, 'index.html', {'form': form, 'data': data })
