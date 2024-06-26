@@ -129,7 +129,6 @@ def text_to_info_finder(text):
 
     patterns = {
         'Date': r"Order\sDate:\s*(\b\d{1,2} \w+ \d{4}\b)",
-        # 'Supplier': 
         'Purchase Order Number':r"Order\s#\s*(\d+)",
         'Document Reference': r"(?:InvoiceNo|invoiceNo|Invoice No|Invoice Number|Invoice \#)\s*([A-Za-z0-9]+)|INV\d{6}|d{9}|\bINV\d{6}\b",
         'Due Date': r"Payment Due\:\s*\n?\s*(\d{2}/\d{2}/\d{4})",
@@ -145,17 +144,50 @@ def text_to_info_finder(text):
     # Initialize an empty dictionary to store extracted values
     extracted_values = {}
 
+    # List of possible supplier names
+    supplier_names = [
+        "packagingexpress",
+        "packaging express",
+        "Bidfood",
+        "UK Packaging Supplies Ltd",
+        "Big Yellow Self Storage Company M Limited"
+    ]
+
+   # Check if any of the supplier names are present in the text
+    found_supplier = False
+    for supplier in supplier_names:
+        if re.search(re.escape(supplier), text, re.IGNORECASE):
+            extracted_values['Supplier'] = supplier
+            found_supplier = True
+            break
+
+    if not found_supplier:
+        extracted_values['Supplier'] = None
+
+    # Dictionary mapping currency symbols to their names or codes
+    currency_mapping = {
+        "GBP": "GBP",
+        '€': "EURO",
+        '£': "GBP"
+    }
+    # Check for currency symbols in the text and assign the corresponding value
+    for symbol, currency in currency_mapping.items():
+        if re.search(re.escape(symbol), text):
+            extracted_values['Currency'] = currency
+            break
+    else:
+        extracted_values['Currency'] = None
     # Iterate through patterns and extract values using regex
     for key, pattern in patterns.items():
         match = re.search(pattern, text)
         if match:
-            extracted_values[key] = match.group(1)
+            extracted_values[key] = match.group(1)  # For other keys, extract the matched group
         else:
             extracted_values[key] = None
 
     # Create DataFrame from extracted values
     invoice_df = pd.DataFrame([extracted_values])
-    print(invoice_df)
+
     return invoice_df
 def information_retrieve(text):
     # columns = ['Item ID', 'Document Owner', 'Type', 'Date', 'Supplier', 'Purchase Order Number', 'Document Reference',
