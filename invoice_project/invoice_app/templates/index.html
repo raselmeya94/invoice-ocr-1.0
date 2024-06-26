@@ -1,10 +1,11 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+    {% load static %}
 <head>
     <meta charset="UTF-8">
     <meta name="csrf-token" content="{{ csrf_token }}">
     <link rel="stylesheet" href="static/style.css">
+
     <title>invoice info</title>
 </head>
 <body>
@@ -25,12 +26,27 @@
         </ul>
     </nav>
 </header>
-<h1>Invoice Information Extraction</h1>
-    <form id="upload-form" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="upload-button">Upload</button>
-    </form>
+<h1 style="color: #40b49c">Invoice Information Extraction</h1>
+
+    <div class="form-container">
+       <form id="upload-form" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="container">
+             <div class="card">
+                <h3>Upload Files</h3>
+                <div class="drop_box">
+                   <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
+                      <img src="{% static 'image/cloud-computing.png' %}" alt="Upload Icon" class="img">
+                   </div>
+                   <input type="file" hidden accept=".pdf" id="fileID" style="display:none;">
+                   {{ form.as_p }}
+                </div>
+                <button type="submit" class="upload-button">Upload</button>
+             </div>
+          </div>
+       </form>
+    </div>
+
     {% if data %}
     <div class="df">
         <table id="file-table">
@@ -47,14 +63,13 @@
                         <td>{{ item.filename }}</td>
                         <td>{{ item.file_size }}</td>
                         <td>
-                            <button type="button" onclick="previewFile('{{ item.filename|slice:':-4' }}')">Preview</button>
+                            <button class="preview-button" type="button" onclick="previewFile('{{ item.filename }}')">Preview</button>
                         </td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
-    
     <div class="modal" id="preview-modal">
         <div class="modal-content">
             <button class="close-button" onclick="closePreview()">&times;</button>
@@ -87,18 +102,18 @@
         let data = {};
         new_data.forEach(entry => {
             let filename = entry.filename;
-            let key = filename.split('.')[0]; 
+            let key = filename.split('.')[0];
             data[key] = entry;
         });
         var pre_filename='';
         function previewFile(filename) {
-            pre_filename=filename;
-            const item = data[filename];
+            pre_filename=filename.split('.')[0];
+            const item = data[pre_filename];
             const leftPreview = document.getElementById('left-preview');
             const rightPreview = document.getElementById('right-preview');
 
             let fileData = item.uploaded_file_data;
-            let fileType = item.file_type;  
+            let fileType = item.file_type;
 
             if (fileType.startsWith('image')) {
                 leftPreview.innerHTML = `<img src="data:${fileType};base64,${fileData}" alt="Uploaded Image">`;
@@ -119,24 +134,24 @@
         }
 
         function showMoreInfo() {
-            
+
             const moreInfoSection = document.getElementById('more-info-section');
 
             const item = data[pre_filename];
-            moreInfoSection.innerHTML = item.df_html; 
-            
+            moreInfoSection.innerHTML = item.df_html;
+
 
             // Apply custom styles to the dynamically loaded table
-            const table = moreInfoSection.querySelector('table'); 
+            const table = moreInfoSection.querySelector('table');
             if (table) {
                 // Customize table styles
-                table.style.width = '100%'; 
-                table.style.borderCollapse = 'collapse'; 
+                table.style.width = '100%';
+                table.style.borderCollapse = 'collapse';
                 const cells = table.querySelectorAll('th, td');
                 cells.forEach(cell => {
-                    cell.style.padding = '8px'; 
-                    cell.style.textAlign = 'center'; 
-                    cell.style.border = '1px solid #ddd'; 
+                    cell.style.padding = '8px';
+                    cell.style.textAlign = 'center';
+                    cell.style.border = '1px solid #ddd';
                 });
                 table.style.backgroundColor = '#f2f2f2';
             }
@@ -149,6 +164,9 @@
         function closeMoreInfo() {
             document.getElementById('more-info-modal').style.display = 'none';
         }
+
+
+
     </script>
   <footer>
         &copy; 2024 Tappware Solution Limited. All rights reserved.
