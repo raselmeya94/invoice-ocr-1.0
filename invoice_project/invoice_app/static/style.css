@@ -35,12 +35,14 @@ h1 {
 #preview-modal .modal-content {
     align-items: center;
     justify-content: space-between;
+    box-shadow: 0px 2px 10px 10px rgba(0, 0, 0, 0.3);
 }
 .preview-container {
     display: flex;
     width: 100%;
     height: 100%;
     gap: 10px;
+    /* box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.3); */
 
    /* Add space between left and right previews */
 }
@@ -73,6 +75,9 @@ h1 {
     font-size: 1.5rem;
     cursor: pointer;
 }
+.close-button:hover{
+    color:#eb0808;
+}
 .close-more-info {
     align-self: flex-end;
     margin-bottom: 10px;
@@ -80,6 +85,9 @@ h1 {
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
+}
+.close-more-info:hover{
+    color:#eb0808;
 }
 .showMoreInfo {
     padding: 10px 20px;
@@ -155,30 +163,63 @@ margin-top: 10px;
     cursor: pointer;
     border-radius: 5px;
     color: #fff;
-}/*
+}
 .upload-button:hover {
     background-color: #40b49c;
-}*/
-/* Table styles */
+}
+/* Table styles*/
+.df {
+    display: flex;
+    justify-content: center;
+    padding-top: 10px;
+    margin-bottom: 50px;
+}
 #file-table {
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     width: 50%;
     margin: 20px auto;
-}
-#file-table th, #file-table td {
     border: 1px solid #ddd;
+    border-radius: 10px; /* Apply radius to the whole table */
+}
+
+#file-table thead {
+    background-color: #40b49c;
+    color: #ffffff;
+}
+
+#file-table thead th {
     padding: 10px;
     text-align: center;
     font-size: 16px;
+    /* border: 1px solid #ddd; */
+    border-top: none; /* Remove the top border */
 }
-#file-table th {
-    background-color: #40b49c;
-    border: none;
+
+#file-table thead th:first-child {
+    border-top-left-radius: 10px; /* Rounded corner for the first header cell */
+}
+
+#file-table thead th:last-child {
+    border-top-right-radius: 10px; /* Rounded corner for the last header cell */
+}
+
+#file-table tbody td {
     padding: 10px;
-    color: #ffffff;
-    border-top-right-radius: 10px;
-    border-top-left-radius: 10px
+    text-align: center;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-left: none; /* Remove the left border */
+    border-right: none; /* Remove the right border */
+}
+
+#file-table tbody tr:first-child td {
+    border-top: none; /* Remove the top border of the first row cells */
+}
+
+#file-table tbody tr:last-child td {
+    border-bottom: none; /* Remove the bottom border of the last row cells */
 }
 #file-table button {
     border:none;
@@ -192,15 +233,7 @@ margin-top: 10px;
     background-color: #40b49c;
     color: #ffffff;
 }
-/* Footer styles */
 
-/* zafi*/
-.df {
-    display: flex;
-    justify-content: center;
-    padding-top: 10px;
-    margin-bottom: 50px;
-}
 footer {
     text-align: center;
     padding: 15px;
@@ -264,9 +297,6 @@ nav li a:hover {
     color: #ffffff;
 }
 
-
-
-/* 26june*/
 * {
   margin: 0;
   padding: 0;
@@ -275,20 +305,19 @@ nav li a:hover {
 }
 
 .container {
-  height: 400px;
+  height: 270px;
   width: 100%;
   align-items: center;
   display: flex;
   justify-content: center;
-  background-color: #fcfcfc;
 }
 
 .card {
   border-radius: 10px;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.3);
   width: 800px;
-  height: 400px;
-  background-color: #ffffff;
+  height: 290px;
+  background-color: #8d8787;
   padding: 10px 30px 40px;
 }
 
@@ -299,19 +328,20 @@ nav li a:hover {
 }
 
 .drop_box {
-  margin: 10px 0;
-  padding: 30px;
+  margin: 5px 0;
+  padding: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   border: 3px dotted #a3a3a3;
   border-radius: 5px;
+  background-color: #fff;
 }
 
 .drop_box h4 {
-  font-size: 16px;
-  font-weight: 400;
+  font-size: 12px;
+  font-weight: 350;
   color: #2e2e2e;
 }
 
@@ -379,6 +409,6 @@ nav li a:hover {
         display: none;
   }
  .img{
-     width: 100px;
-     height:100px;
+     width: 70px;
+     height:70px;
  }

@@ -8,17 +8,57 @@ import fitz  # PyMuPDF
 import pandas as pd
 import numpy as np
 ###
-
+# remove line ( horizontal and vertical)
+# def remove_lines(image):
+#     # Convert image to grayscale
+#     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    
+#     # Apply adaptive thresholding to get a binary image
+#     binary = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
+#                                    cv2.THRESH_BINARY, 11, 2)
+    
+#     # Invert the image
+#     inverted_binary = cv2.bitwise_not(binary)
+    
+#     # Create horizontal and vertical structure elements
+#     horizontal_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (25, 1))
+#     vertical_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 25))
+    
+#     # Detect horizontal lines
+#     horizontal_lines = cv2.morphologyEx(inverted_binary, cv2.MORPH_OPEN, horizontal_kernel, iterations=2)
+    
+#     # Detect vertical lines
+#     vertical_lines = cv2.morphologyEx(inverted_binary, cv2.MORPH_OPEN, vertical_kernel, iterations=2)
+    
+#     # Subtract lines from the binary image
+#     binary_without_lines = cv2.bitwise_and(inverted_binary, inverted_binary, mask=cv2.bitwise_not(horizontal_lines))
+#     binary_without_lines = cv2.bitwise_and(binary_without_lines, binary_without_lines, mask=cv2.bitwise_not(vertical_lines))
+    
+#     # Invert the result back
+#     result = cv2.bitwise_not(binary_without_lines)
+    
+#     return result
 
 def extract_text_from_image(image_data):
     image = Image.open(io.BytesIO(image_data))
     image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)  # Convert to BGR format for OpenCV
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     _, binary = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    # processed_image = remove_lines(image)
     denoised = cv2.fastNlMeansDenoising(binary, None, 30, 7, 21)
+    
     text = pytesseract.image_to_string(denoised)
     return text
 
+# def extract_text_from_pdf_img(pdf_data):
+#     pdf_document = fitz.open(stream=pdf_data, filetype="pdf")
+#     text = ""
+#     for page_num in range(len(pdf_document)):
+#         page = pdf_document.load_page(page_num)
+#         pix = page.get_pixmap()
+#         image_data = pix.tobytes(output="png")
+#         text += extract_text_from_image(image_data)
+#     return text
 
 def extract_text_from_pdf(pdf_data):
     pdf_document = fitz.open(stream=pdf_data, filetype="pdf")
@@ -33,10 +73,6 @@ def extract_text_from_pdf(pdf_data):
             pix = page.get_pixmap()
             image_data = pix.tobytes(output="png")
             text += extract_text_from_image(image_data)
-
-    print("FileName:",len(text))
-
-
     return text
 
 
@@ -74,7 +110,8 @@ def text_to_info_finder(text):
         "packaging express",
         "Bidfood",
         "UK Packaging Supplies Ltd",
-        "Big Yellow Self Storage Company M Limited"
+        "Big Yellow Self Storage Company M Limited",
+        "Metoni Logistics"
     ]
 
    # Check if any of the supplier names are present in the text
