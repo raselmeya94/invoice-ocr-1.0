@@ -1,17 +1,27 @@
-# from django.db import models
+from django.db import models
+from .utils import extract_text_from_file , text_to_info_finder
+import json
 
-# Create your models here.
-from django import forms
-class UploadFileForm(forms.Form):
-    file = forms.FileField()
+class Invoice_Extractor(models.Model):
+    def file_to_text_info(self, file_data, file_type):
+        # print(file_type)
+        try:
+            extracted_text = extract_text_from_file(file_data, file_type)
 
+            informations = text_to_info_finder(extracted_text)
+            
+            # Prepare the response dictionary
+            response_dict = {
+                'extracted_text': extracted_text,
+                'information': informations
+                } 
+            # Convert the dictionary to a JSON string
+            response_json = json.dumps(response_dict)
 
-
-
-
-
-# from django.db import models
-#
-# class UploadedFile(models.Model):
-#     file = models.FileField(upload_to='uploads/')
-#     uploaded_at = models.DateTimeField(auto_now_add=True)
+            return response_json
+        except Exception as e:
+            # Handle exceptions and return an error message as JSON
+            error_info = {
+                'error': str(e)
+            }
+            return json.dumps(error_info)
