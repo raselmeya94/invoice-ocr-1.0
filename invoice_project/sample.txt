@@ -1,0 +1,27 @@
+FRIERNS SUB LIMITED
+FRIERNS BRIDGE RETAIL PARK
+UNIT 126 PEGASUS WAY
+LONDON
+N11 3PW
+
+Address: Bidfood Accounts Receivable Department
+Unit 5a Crowland Business Park
+Foul Lane
+Southport PR9 7RS
+
+Telephone: 01704 861000
+Fax: 0643994692
+Registration: GB643994692
+
+DD Collection Advice
+
+Account Number 10887905
+Payment Date 08/08/2023
+Page 1
+Payment Reference DD030823
+
+Unit Invoice Invoice Date Currency Net Amount VAT Gross Amount
+62455 225669238 25/07/2023 GBP 1,020.20 51.59 1,071.79
+62455 22602130 27/07/2023 GBP 1,272.06 47.24 1,319.30
+
+Total 2,292.26 98.83 2,391.09

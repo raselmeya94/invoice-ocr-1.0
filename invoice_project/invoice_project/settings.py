@@ -140,3 +140,4 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Maximum number of files that can be uploaded in a single request
 DATA_UPLOAD_MAX_NUMBER_FILES = 200  # Adjust this number as needed
+DATA_UPLOAD_MAX_MEMORY_SIZE = 1024*1024*100  # Example: 100 MB limit
