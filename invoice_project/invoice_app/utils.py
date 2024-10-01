@@ -7,7 +7,6 @@ import fitz
 import google.generativeai as genai
 
 # Gemini API Key Setup for further processing
-
 GEMINI_API_KEY ="API KEY"
 
 if GEMINI_API_KEY:
@@ -15,7 +14,6 @@ if GEMINI_API_KEY:
     genai.configure(api_key=GEMINI_API_KEY)
 else:
     raise ValueError("API key not found! Please set the GEMINI_API_KEY environment variable.")
-
 
 # PDF to image conversion and text extraction functions
 def pdf_to_image_conversion(pdf_data):
