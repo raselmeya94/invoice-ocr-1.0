@@ -1,6 +1,6 @@
 from django.db import models
 # from .utils import extract_text_from_file
-from .gemini_api_section import extract_text_from_file , info_to_dataframe
+from .utils import extract_text_from_file , info_to_dataframe
 import json
 
 import json
@@ -8,13 +8,10 @@ import pandas as pd
 
 class Invoice_Extractor(models.Model):
     def file_to_text_info(self, file_data, file_type):
-        print("File to extract")
         try:
             # Extract text and info from the file
             extracted_text, info = extract_text_from_file(file_data, file_type)
-            informations = info_to_dataframe(info)  # return DataFrame
-
-            print(type(extracted_text), type(informations))
+            informations = info_to_dataframe(info) 
 
             # Convert the DataFrame to a JSON serializable format (dictionary)
             if informations is not None:
