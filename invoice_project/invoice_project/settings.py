@@ -30,7 +30,8 @@ SECRET_KEY = "django-insecure-eel!#aw7+^^wsam@9@0(l(a@ak^xf&lw6yrl0kzq1@30u1nyjq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
 
 # Application definition
 
@@ -41,9 +42,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'invoice_app'
+    'invoice_app',
+    "rest_framework",
+    "corsheaders",
 ]
-
+CORS_ALLOW_ALL_ORIGINS = True
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -52,6 +55,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = "invoice_project.urls"
@@ -135,3 +140,4 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Maximum number of files that can be uploaded in a single request
 DATA_UPLOAD_MAX_NUMBER_FILES = 200  # Adjust this number as needed
+DATA_UPLOAD_MAX_MEMORY_SIZE = 1024*1024*100  # Example: 100 MB limit
